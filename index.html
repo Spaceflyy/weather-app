@@ -4,11 +4,22 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Weather App</title>
+	<script defer src="main.js"></script></head>
+	<body>
 		<form id="form" action="post">
 			<input id="search" type="text" /> <input type="submit" />
 		</form>
+		<div id="weatherContainer">
+			<p id="locDisp"></p>
+			<div id="tempDisp">
+				<img id="weatherImg" src="" alt="" />
+				<p id="temp"></p>
+			</div>		
+			<p id="currentWeatherContainer">
+				<p id="currentWeather"></p>
+				<p id="hiLoTemp"></p>
+			</p>
 
-		<h3 id="tempDisplay"></h3>
-	<script defer src="main.js"></script></head>
-	<body></body>
+		</div>
+	</body>
 </html>

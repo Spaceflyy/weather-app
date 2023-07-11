@@ -1,0 +1,25 @@
+html,
+body {
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+#weatherContainer {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	align-items: center;
+}
+#weatherContainer p {
+	margin: 0;
+}
+#locDisp {
+	font-size: 1.5rem;
+}
+#tempDisp {
+	display: flex;
+	gap: 1rem;
+	font-size: 2.4rem;
+	align-items: center;
+}

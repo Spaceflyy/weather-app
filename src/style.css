@@ -24,7 +24,8 @@ body {
 	align-items: center;
 }
 
-#hourlyContainer {
+#hourlyContainer,
+#threedayContainer {
 	background-color: rgba(179, 179, 179, 0.3);
 	border-radius: 10px;
 	padding: 2rem;
@@ -33,4 +34,7 @@ body {
 	text-align: center;
 	gap: 1rem;
 	margin-top: 3rem;
+}
+#threedayContainer {
+	grid-auto-flow: row;
 }

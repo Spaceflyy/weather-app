@@ -1,5 +1,5 @@
 import "./style.css";
-import { compareAsc, format } from "date-fns";
+import { parseISO, getDay } from "date-fns";
 
 const search = document.getElementById("search");
 const form = document.getElementById("form");
@@ -9,6 +9,7 @@ const currnetWeatherImg = document.getElementById("weatherImg");
 const currentWeather = document.getElementById("currentWeather");
 const HiLoTemp = document.getElementById("hiLoTemp");
 const hourlyContainer = document.getElementById("hourlyContainer");
+const threedaycontainer = document.getElementById("threedayContainer");
 
 const getWeatherData = async (location) => {
 	try {
@@ -17,8 +18,18 @@ const getWeatherData = async (location) => {
 		);
 
 		const data = await response.json();
+
 		const hourly = data.forecast.forecastday[0].hour;
-		console.log(hourly);
+		const dayForecasts = data.forecast.forecastday;
+		const weekDay = [
+			"Sunday",
+			"Monday",
+			"Tuesday",
+			"Wednesday",
+			"Thursday",
+			"Friday",
+			"Saturday",
+		];
 		currnetWeatherImg.src = data.current.condition.icon;
 		locDisplay.textContent = `${data.location.name}`;
 		temp.innerText = `${data.current.temp_c}\u00B0C`;
@@ -26,7 +37,7 @@ const getWeatherData = async (location) => {
 		HiLoTemp.innerText = `H:${data.forecast.forecastday[0].day.maxtemp_c}\u00B0C L:${data.forecast.forecastday[0].day.mintemp_c}\u00B0C`;
 
 		hourly.forEach((element) => {
-			if (element.time.slice(11) > format(new Date(), "hh:mm")) {
+			if (element.time.slice(11) > data.current.last_updated.slice(11)) {
 				const container = document.createElement("div");
 				const time = document.createElement("p");
 				const hourTemp = document.createElement("p");
@@ -40,8 +51,16 @@ const getWeatherData = async (location) => {
 				hourlyContainer.append(container);
 			}
 		});
-		console.log(data);
-		// , ${data.location.region}, ${data.location.country}
+
+		for (let i = 0; i < dayForecasts.length; i++) {
+			const p = document.createElement("p");
+
+			p.innerText = `${weekDay[getDay(parseISO(dayForecasts[i].date))]} ${
+				data.forecast.forecastday[i].day.maxtemp_c
+			}\u00B0C L:${data.forecast.forecastday[i].day.mintemp_c}`;
+
+			threedaycontainer.append(p);
+		}
 	} catch (error) {
 		console.error(`Error: ${error}`);
 	}
@@ -73,5 +92,6 @@ getCoords()
 form.addEventListener("submit", (e) => {
 	e.preventDefault();
 	const location = search.value;
+	hourlyContainer.innerHTML = "";
 	getWeatherData(location);
 });

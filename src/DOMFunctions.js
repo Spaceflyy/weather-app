@@ -10,7 +10,7 @@ const HiLoTemp = document.getElementById("hiLoTemp");
 const hourlyContainer = document.getElementById("hourlyContainer");
 const threedaycontainer = document.getElementById("threedayContainer");
 
-export default async function renderWeather(data) {
+async function renderWeather(data) {
 	const hourly = data.forecast.forecastday[0].hour;
 	const dayForecasts = data.forecast.forecastday;
 	const weekDay = [
@@ -22,6 +22,7 @@ export default async function renderWeather(data) {
 		"Friday",
 		"Saturday",
 	];
+	console.log(data);
 	currnetWeatherImg.src = data.current.condition.icon;
 	locDisplay.textContent = `${data.location.name}`;
 	temp.innerText = `${data.current.temp_c}\u00B0C`;
@@ -45,12 +46,34 @@ export default async function renderWeather(data) {
 	});
 
 	for (let i = 0; i < dayForecasts.length; i++) {
-		const p = document.createElement("p");
-
-		p.innerText = `${weekDay[getDay(parseISO(dayForecasts[i].date))]} ${
-			data.forecast.forecastday[i].day.maxtemp_c
-		}\u00B0C L:${data.forecast.forecastday[i].day.mintemp_c}`;
-
-		threedaycontainer.append(p);
+		const day = document.createElement("p");
+		const hiTemp = document.createElement("p");
+		const lowTemp = document.createElement("p");
+		const chanceOfRain = document.createElement("p");
+		const imgContainer = document.createElement("div");
+		const weatherIcon = new Image();
+		weatherIcon.src = data.current.condition.icon;
+		day.innerText = `${weekDay[getDay(parseISO(dayForecasts[i].date))]}  `;
+		hiTemp.innerText = `H:${data.forecast.forecastday[i].day.maxtemp_c}\u00B0C`;
+		lowTemp.innerText = `L:${data.forecast.forecastday[i].day.mintemp_c}`;
+		chanceOfRain.innerText = `${data.forecast.forecastday[i].day.daily_chance_of_rain}%`;
+		threedaycontainer.append(day);
+		imgContainer.append(weatherIcon);
+		imgContainer.append(chanceOfRain);
+		threedaycontainer.append(imgContainer);
+		threedaycontainer.append(lowTemp);
+		threedaycontainer.append(hiTemp);
 	}
 }
+
+const bindSearch = (handler) => {
+	form.addEventListener("submit", (e) => {
+		e.preventDefault();
+		const location = search.value;
+		hourlyContainer.innerHTML = "";
+		threedaycontainer.innerHTML = "";
+		handler(location);
+	});
+};
+
+export { renderWeather, bindSearch };

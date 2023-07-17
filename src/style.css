@@ -88,5 +88,9 @@ input[type="text"] {
 
 @media only screen and (max-width: 900px) {
 	#weatherContainer {
+		display: block;
+	}
+	p {
+		margin-top: 0;
 	}
 }

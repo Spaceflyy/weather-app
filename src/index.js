@@ -1,14 +1,13 @@
 import "./style.css";
 import { getLocation, getWeatherData } from "./apiFunctions";
-import { bindSearch, renderWeather } from "./DOMFunctions";
+import { showUI, bindSearch, renderWeather } from "./DOMFunctions";
 
 async function test() {
 	renderWeather(await getWeatherData(await getLocation()));
+	showUI();
 }
-test();
-
 async function handleSearch(location) {
 	renderWeather(await getWeatherData(location));
 }
-
+test();
 bindSearch(handleSearch);

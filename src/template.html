@@ -5,7 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Weather App</title>
 	</head>
+
 	<body>
+		<div class="loaderContainer">
+			<div class="loader"></div>
+		</div>
 		<div id="weatherContainer">
 			<form id="form" action="post">
 				<input id="search" type="text" /> <input type="submit" />
@@ -19,13 +23,20 @@
 				<p id="currentWeather"></p>
 				<p id="hiLoTemp"></p>
 			</div>
-			<div id="hourlyContainer"></div>
-			<div id="threedayContainer"></div>
+			<div id="hourlyContainer">
+				<div id="titleContainer">
+					<h2>Today's Forecast</h2>
+				</div>
+			</div>
+			<div id="threedayContainer">
+				<div id="titleContainer">
+					<h2>Three Day Forecast</h2>
+				</div>
+			</div>
 			<div id="otherInfo">
 				<div id="titleContainer">
 					<h2>Air Conditions</h2>
 				</div>
-
 				<div id="realFeelContainer">
 					<h3>Real Feel</h3>
 					<p id="realFeel"></p>

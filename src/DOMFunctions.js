@@ -1,5 +1,6 @@
 import { parseISO, getDay } from "date-fns";
 
+const ui = document.getElementById("weatherContainer");
 const search = document.getElementById("search");
 const form = document.getElementById("form");
 const locDisplay = document.getElementById("locDisp");
@@ -15,28 +16,35 @@ const wind = document.getElementById("windSpeed");
 const rain = document.getElementById("rain");
 const uv = document.getElementById("uv");
 
+const showUI = () => {
+	const loader = document.querySelector(".loaderContainer");
+	ui.style.display = "grid";
+
+	loader.style.display = "none";
+};
 const renderHourlyWeather = (data) => {
 	const hourly = data.forecast.forecastday[0].hour;
-	hourly.forEach((element) => {
+
+	for (let i = 0; i < hourly.length; i += 2) {
 		const container = document.createElement("div");
 		const time = document.createElement("p");
 		const hourTemp = document.createElement("p");
 		const weatherImg = new Image();
-		weatherImg.src = element.condition.icon;
-		if (element.time.slice(11, 13) === data.current.last_updated.slice(11, 13)) {
+		weatherImg.src = hourly[i].condition.icon;
+		if (
+			hourly[i].time.slice(11, 13) === data.current.last_updated.slice(11, 13)
+		) {
 			time.innerText = "Now";
 		} else {
-			time.innerText = element.time.slice(11);
+			time.innerText = hourly[i].time.slice(11);
 		}
 
-		console.log(`element.time: ${element.time.slice(11, 13)}`);
-		console.log(`data.current: ${data.current.last_updated.slice(11)}`);
-		hourTemp.innerText = `${element.temp_c}\u00B0C`;
+		hourTemp.innerText = `${hourly[i].temp_c}\u00B0C`;
 		container.append(time);
 		container.append(weatherImg);
 		container.append(hourTemp);
 		hourlyContainer.append(container);
-	});
+	}
 };
 
 const renderThreeDayForecast = (data) => {
@@ -58,11 +66,11 @@ const renderThreeDayForecast = (data) => {
 		const chanceOfRain = document.createElement("p");
 		const imgContainer = document.createElement("div");
 		const weatherIcon = new Image();
-		weatherIcon.src = data.current.condition.icon;
+		weatherIcon.src = dayForecasts[i].day.condition.icon;
 		day.innerText = `${weekDay[getDay(parseISO(dayForecasts[i].date))]}  `;
-		hiTemp.innerText = `H:${data.forecast.forecastday[i].day.maxtemp_c}\u00B0C`;
-		lowTemp.innerText = `L:${data.forecast.forecastday[i].day.mintemp_c}`;
-		chanceOfRain.innerText = `${data.forecast.forecastday[i].day.daily_chance_of_rain}%`;
+		hiTemp.innerText = `H:${dayForecasts[i].day.maxtemp_c}\u00B0C`;
+		lowTemp.innerText = `L:${dayForecasts[i].day.mintemp_c}`;
+		chanceOfRain.innerText = `${dayForecasts[i].day.daily_chance_of_rain}%`;
 		threedaycontainer.append(day);
 		imgContainer.append(weatherIcon);
 		imgContainer.append(chanceOfRain);
@@ -96,4 +104,4 @@ const bindSearch = (handler) => {
 	});
 };
 
-export { renderWeather, bindSearch };
+export { showUI, renderWeather, bindSearch };

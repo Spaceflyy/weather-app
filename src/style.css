@@ -52,7 +52,7 @@ input[type="text"] {
 }
 
 #hourlyContainer,
-#threedayContainer,
+#threeDayContainer,
 #otherInfo {
 	background-color: rgba(179, 179, 179, 0.3);
 	border-radius: 10px;
@@ -63,7 +63,7 @@ input[type="text"] {
 	text-align: center;
 	min-width: 30%;
 }
-#threedayContainer {
+#threeDayContainer {
 	grid-auto-flow: row;
 
 	grid-template-rows: max-content;
@@ -72,7 +72,7 @@ input[type="text"] {
 	grid-row: 2/5;
 	height: 100%;
 }
-#threedayContainer #titleContainer {
+#threeDayContainer #titleContainer {
 	grid-column: 1/5;
 }
 #hourlyContainer {

@@ -31,6 +31,7 @@ async function getLocation() {
 			)}&key=af91cea604034c6db9a08743831a8590`
 		);
 		const data = await location.json();
+		console.log(data);
 		return data.results[0].components.postcode;
 	} catch (error) {
 		console.error(`Error: ${error}`);

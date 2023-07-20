@@ -38,9 +38,13 @@ const createHTMLElements = () => {
 const showUI = () => {
 	const loader = document.querySelector(".loaderContainer");
 	const ui = document.getElementById("weatherContainer");
-	ui.style.display = "grid";
-
-	loader.style.display = "none";
+	if (ui.style.display === "grid") {
+		ui.style.display = "none";
+		loader.style.display = "flex";
+	} else {
+		ui.style.display = "grid";
+		loader.style.display = "none";
+	}
 };
 
 const renderHourlyWeather = (data) => {
@@ -56,9 +60,14 @@ const renderHourlyWeather = (data) => {
 
 	for (let i = 0; i < hourly.length; i += 2) {
 		const container = document.createElement("div");
+		container.classList.add("hourlyInfo");
 		const time = document.createElement("p");
 		const hourTemp = document.createElement("p");
 		const weatherImg = new Image();
+
+		const line = document.createElement("div");
+		line.classList.add("verticalLine");
+
 		weatherImg.src = hourly[i].condition.icon;
 		if (
 			hourly[i].time.slice(11, 13) === data.current.last_updated.slice(11, 13)
@@ -69,10 +78,11 @@ const renderHourlyWeather = (data) => {
 		}
 
 		hourTemp.innerText = `${hourly[i].temp_c}\u00B0C`;
-
+		container.append(line);
 		container.append(time);
 		container.append(weatherImg);
 		container.append(hourTemp);
+
 		hourlyContainer.append(container);
 	}
 };
@@ -82,7 +92,7 @@ const renderThreeDayForecast = (data) => {
 	const titleContainer = document.createElement("div");
 	titleContainer.setAttribute("id", "titleContainer");
 	const title = document.createElement("h2");
-	title.textContent = "Three day Forecast";
+	title.textContent = "Three Day Forecast";
 	titleContainer.append(title);
 	threedaycontainer.append(titleContainer);
 	const dayForecasts = data.forecast.forecastday;

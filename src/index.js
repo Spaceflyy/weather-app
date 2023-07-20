@@ -15,7 +15,10 @@ async function test() {
 }
 
 async function handleSearch(location) {
+	showUI();
 	renderWeather(await getWeatherData(location));
+	showUI();
 }
+
 test();
 bindSearch(handleSearch);

@@ -1,4 +1,4 @@
-import { parseISO, getDay } from "date-fns";
+import { format, parseISO, getDay, daysToWeeks } from "date-fns";
 
 // const search = document.getElementById("search");
 //
@@ -69,20 +69,18 @@ const renderHourlyWeather = (data) => {
 		line.classList.add("verticalLine");
 
 		weatherImg.src = hourly[i].condition.icon;
-		if (
-			hourly[i].time.slice(11, 13) === data.current.last_updated.slice(11, 13)
-		) {
-			time.innerText = "Now";
-		} else {
-			time.innerText = hourly[i].time.slice(11);
-		}
+
+		time.innerText = hourly[i].time.slice(11);
 
 		hourTemp.innerText = `${hourly[i].temp_c}\u00B0C`;
-		container.append(line);
+
 		container.append(time);
 		container.append(weatherImg);
 		container.append(hourTemp);
-
+		if (!(i % 6 === 0) || i === 6 || i === 18) {
+			hourlyContainer.append(line);
+			console.log(i);
+		}
 		hourlyContainer.append(container);
 	}
 };
@@ -113,7 +111,12 @@ const renderThreeDayForecast = (data) => {
 		const imgContainer = document.createElement("div");
 		const weatherIcon = new Image();
 		weatherIcon.src = dayForecasts[i].day.condition.icon;
-		day.innerText = `${weekDay[getDay(parseISO(dayForecasts[i].date))]}  `;
+		if (i === 0) {
+			day.innerText = "Today";
+		} else {
+			day.innerText = `${weekDay[getDay(parseISO(dayForecasts[i].date))]}  `;
+		}
+
 		hiTemp.innerText = `H:${dayForecasts[i].day.maxtemp_c}\u00B0C`;
 		lowTemp.innerText = `L:${dayForecasts[i].day.mintemp_c}`;
 		chanceOfRain.innerText = `${dayForecasts[i].day.daily_chance_of_rain}%`;
@@ -131,6 +134,15 @@ const renderCurrentWeather = (data) => {
 		"currentWeatherContainer"
 	);
 
+	const weatherData = document.createElement("div");
+	weatherData.setAttribute("id", "currWeatherDisp");
+	const timeContainer = document.createElement("div");
+	timeContainer.setAttribute("id", "lastUpdated");
+
+	const lastUpdatedTitle = document.createElement("h2");
+	lastUpdatedTitle.textContent = "Last Updated";
+	const lastUpdated = document.createElement("h3");
+
 	const tempDisp = document.createElement("div");
 	tempDisp.setAttribute("id", "tempDisp");
 
@@ -140,18 +152,23 @@ const renderCurrentWeather = (data) => {
 	const temp = document.createElement("p");
 	const currentWeather = document.createElement("p");
 	const hiLoTemp = document.createElement("p");
+	lastUpdated.innerText = data.current.last_updated;
 
 	currentWeatherImg.src = data.current.condition.icon;
 	locDisplay.textContent = `${data.location.name}`;
 	temp.innerText = `${data.current.temp_c}\u00B0C`;
 	currentWeather.innerText = `${data.current.condition.text} `;
-	hiLoTemp.innerText = `H:${data.forecast.forecastday[0].day.maxtemp_c}\u00B0C L:${data.forecast.forecastday[0].day.mintemp_c}\u00B0C`;
-	currentWeathercontainer.append(locDisplay);
-	currentWeathercontainer.append(tempDisp);
+	hiLoTemp.innerText = ` L:${data.forecast.forecastday[0].day.mintemp_c}\u00B0C H:${data.forecast.forecastday[0].day.maxtemp_c}\u00B0C`;
+	weatherData.append(locDisplay);
+	weatherData.append(tempDisp);
 	tempDisp.append(currentWeatherImg);
 	tempDisp.append(temp);
-	currentWeathercontainer.append(currentWeather);
-	currentWeathercontainer.append(hiLoTemp);
+	weatherData.append(currentWeather);
+	weatherData.append(hiLoTemp);
+	currentWeathercontainer.append(weatherData);
+	timeContainer.append(lastUpdatedTitle);
+	timeContainer.append(lastUpdated);
+	currentWeathercontainer.append(timeContainer);
 };
 
 const renderOtherInfo = (data) => {

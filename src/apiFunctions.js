@@ -3,7 +3,9 @@ async function getWeatherData(location) {
 		const response = await fetch(
 			`https://api.weatherapi.com/v1/forecast.json?key=f5ce7cba05f246508ad95118230507&q=${location}&days=3&aqi=no&alerts=no`
 		);
-		return await response.json();
+		const data = await response.json();
+		console.log(data);
+		return data;
 	} catch (error) {
 		console.error(`Error: ${error}`);
 	}
@@ -31,7 +33,7 @@ async function getLocation() {
 			)}&key=af91cea604034c6db9a08743831a8590`
 		);
 		const data = await location.json();
-		console.log(data);
+
 		return data.results[0].components.postcode;
 	} catch (error) {
 		console.error(`Error: ${error}`);

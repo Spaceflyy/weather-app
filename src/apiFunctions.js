@@ -22,21 +22,25 @@ getCoords()
 	});
 
 async function getLocation() {
-	try {
-		const locationCoords = await getCoords();
-		const lat = await locationCoords.coords.latitude;
-		const long = locationCoords.coords.longitude;
+	if (navigator.geolocation) {
+		try {
+			const locationCoords = await getCoords();
+			const lat = await locationCoords.coords.latitude;
+			const long = locationCoords.coords.longitude;
 
-		const location = await fetch(
-			`https://api.opencagedata.com/geocode/v1/json?q=${String(lat)}+${String(
-				long
-			)}&key=af91cea604034c6db9a08743831a8590`
-		);
-		const data = await location.json();
+			const location = await fetch(
+				`https://api.opencagedata.com/geocode/v1/json?q=${String(lat)}+${String(
+					long
+				)}&key=af91cea604034c6db9a08743831a8590`
+			);
+			const data = await location.json();
 
-		return data.results[0].components.postcode;
-	} catch (error) {
-		console.error(`Error: ${error}`);
+			return data.results[0].components.postcode;
+		} catch (error) {
+			if (error.code === 1) {
+				console.log("NOOOO");
+			}
+		}
 	}
 }
 

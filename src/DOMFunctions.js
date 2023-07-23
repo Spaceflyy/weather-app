@@ -1,12 +1,16 @@
 import { format, parseISO, getDay, daysToWeeks } from "date-fns";
-
-// const search = document.getElementById("search");
-//
-
-//
-//
+import temp from "./icons/temp.svg";
+import water from "./icons/water.svg";
+import windIm from "./icons/wind.svg";
+import uvIm from "./icons/sun.svg";
+import loc from "./icons/loc.svg";
 
 const createHTMLElements = () => {
+	const locIcon = new Image();
+	locIcon.src = loc;
+
+	locIcon.setAttribute("id", "locButton");
+
 	const weathercontainer = document.createElement("div");
 	weathercontainer.setAttribute("id", "weatherContainer");
 	const currentWeather = document.createElement("div");
@@ -26,7 +30,9 @@ const createHTMLElements = () => {
 	const button = document.createElement("input");
 	button.setAttribute("type", "submit");
 	form.append(input);
+	form.append(locIcon);
 	form.append(button);
+
 	weathercontainer.append(form);
 	weathercontainer.append(currentWeather);
 	weathercontainer.append(hourly);
@@ -56,8 +62,8 @@ const renderHourlyWeather = (data) => {
 	title.textContent = "Today's Forecast";
 	titleContainer.append(title);
 	hourlyContainer.append(titleContainer);
-	const hourly = data.forecast.forecastday[0].hour;
 
+	const hourly = data.forecast.forecastday[0].hour;
 	for (let i = 0; i < hourly.length; i += 2) {
 		const container = document.createElement("div");
 		container.classList.add("hourlyInfo");
@@ -79,7 +85,6 @@ const renderHourlyWeather = (data) => {
 		container.append(hourTemp);
 		if (!(i % 6 === 0) || i === 6 || i === 18) {
 			hourlyContainer.append(line);
-			console.log(i);
 		}
 		hourlyContainer.append(container);
 	}
@@ -103,13 +108,22 @@ const renderThreeDayForecast = (data) => {
 		"Friday",
 		"Saturday",
 	];
+	const line1 = document.createElement("div");
+	line1.classList.add("horizontalLine");
+	threedaycontainer.append(line1);
 	for (let i = 0; i < dayForecasts.length; i++) {
+		const line = document.createElement("div");
+		line.classList.add("horizontalLine");
 		const day = document.createElement("p");
 		const hiTemp = document.createElement("p");
 		const lowTemp = document.createElement("p");
 		const chanceOfRain = document.createElement("p");
 		const imgContainer = document.createElement("div");
 		const weatherIcon = new Image();
+		const rainImg = new Image();
+		rainImg.src = water;
+		const container = document.createElement("div");
+		container.setAttribute("id", "container");
 		weatherIcon.src = dayForecasts[i].day.condition.icon;
 		if (i === 0) {
 			day.innerText = "Today";
@@ -120,12 +134,17 @@ const renderThreeDayForecast = (data) => {
 		hiTemp.innerText = `H:${dayForecasts[i].day.maxtemp_c}\u00B0C`;
 		lowTemp.innerText = `L:${dayForecasts[i].day.mintemp_c}`;
 		chanceOfRain.innerText = `${dayForecasts[i].day.daily_chance_of_rain}%`;
+
 		threedaycontainer.append(day);
 		imgContainer.append(weatherIcon);
-		imgContainer.append(chanceOfRain);
+		container.append(rainImg);
+		container.append(chanceOfRain);
+		imgContainer.append(container);
+
 		threedaycontainer.append(imgContainer);
 		threedaycontainer.append(lowTemp);
 		threedaycontainer.append(hiTemp);
+		threedaycontainer.append(line);
 	}
 };
 
@@ -180,9 +199,18 @@ const renderOtherInfo = (data) => {
 	title.textContent = "Air Conditions";
 
 	const realFeelCont = document.createElement("div");
+	const container = document.createElement("div");
+	const container2 = document.createElement("div");
+	const container3 = document.createElement("div");
+	const container4 = document.createElement("div");
 	const windCont = document.createElement("div");
 	const rainCont = document.createElement("div");
 	const uvCont = document.createElement("div");
+
+	container.setAttribute("id", "container");
+	container2.setAttribute("id", "container");
+	container3.setAttribute("id", "container");
+	container4.setAttribute("id", "container");
 
 	realFeelCont.setAttribute("id", "realFeelContainer");
 	windCont.setAttribute("id", "windContainer");
@@ -209,20 +237,48 @@ const renderOtherInfo = (data) => {
 	rain.setAttribute("id", "rain");
 	uv.setAttribute("id", "uv");
 
+	const realFeelImg = new Image();
+	realFeelImg.src = temp;
+
+	const rainImg = new Image();
+	rainImg.src = water;
+
+	const windImg = new Image();
+	windImg.src = windIm;
+
+	const uvImg = new Image();
+	uvImg.src = uvIm;
+
 	realFeel.innerText = `${data.current.feelslike_c}\u00B0C`;
 	wind.innerText = `${data.current.wind_mph} MPH`;
 	rain.innerText = `${data.forecast.forecastday[0].day.daily_chance_of_rain} %`;
 	uv.innerText = `${data.current.uv}`;
 
+	container.append(realFeelImg);
+	container.append(realFeel);
+
+	container2.append(rainImg);
+	container2.append(rain);
+
+	container3.append(windImg);
+	container3.append(wind);
+
+	container4.append(uvImg);
+	container4.append(uv);
+
 	titleContainer.append(title);
 	realFeelCont.append(realFeelTitle);
+	realFeelCont.append(container);
+
 	windCont.append(windTitle);
-	windCont.append(wind);
+	windCont.append(container2);
+
 	rainCont.append(rainTitle);
-	rainCont.append(rain);
+	rainCont.append(container3);
+
 	uvCont.append(uvTitle);
-	uvCont.append(uv);
-	realFeelCont.append(realFeel);
+	uvCont.append(container4);
+
 	otherinfoContainer.append(titleContainer);
 	otherinfoContainer.append(realFeelCont);
 	otherinfoContainer.append(windCont);
@@ -254,4 +310,19 @@ const bindSearch = (handler) => {
 	});
 };
 
-export { createHTMLElements, showUI, renderWeather, bindSearch };
+const bindLocButton = (handler) => {
+	const locBtn = document.getElementById("locButton");
+	const currentWeather = document.getElementById("currentWeatherContainer");
+	const otherInfo = document.getElementById("otherInfo");
+	const hourlyContainer = document.getElementById("hourlyContainer");
+	const threedaycontainer = document.getElementById("threeDayContainer");
+	locBtn.addEventListener("click", () => {
+		currentWeather.innerHTML = "";
+		otherInfo.innerHTML = "";
+		hourlyContainer.innerHTML = "";
+		threedaycontainer.innerHTML = "";
+		handler();
+	});
+};
+
+export { createHTMLElements, showUI, renderWeather, bindSearch, bindLocButton };

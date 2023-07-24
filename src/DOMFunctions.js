@@ -27,6 +27,7 @@ const createHTMLElements = () => {
 	const input = document.createElement("input");
 	input.setAttribute("id", "search");
 	input.setAttribute("type", "text");
+	input.setAttribute("placeholder", "Enter city / postcode");
 	const button = document.createElement("input");
 	button.setAttribute("type", "submit");
 	form.append(input);

@@ -8,10 +8,9 @@ import {
 	renderWeather,
 } from "./DOMFunctions";
 
-async function test() {
+async function setup() {
 	createHTMLElements();
-	renderWeather(await getWeatherData(await getLocation()));
-
+	renderWeather(await getWeatherData("London"));
 	showUI();
 }
 
@@ -28,7 +27,6 @@ async function handleGetLoc() {
 	showUI();
 }
 
-test();
-
+setup();
 bindLocButton(handleGetLoc);
 bindSearch(handleSearch);
